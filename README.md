@@ -7,6 +7,7 @@ This project applies the principles outlined in the paper ["Siamese Neural Netwo
   * [Introduction](#Introduction-bookmark_tabs)
   * [Goals](#goals-dart)
   * [Data Description](#data-description-bar_chart)
+  * [Pre-processing Stage](#pre-processing-stage-broom)
   * [Network Architecture](#network-architecture-hammer_and_wrench)
   * [Experimental Configuration](#experimental-configuration-gear)
   * [Experimental Results](#experimental-results-chart_with_upwards_trend)
@@ -24,26 +25,54 @@ Network performance and evaluation were done on the ['Labeled Faces in the Wild-
 
 ![](docs/LFW-a_example.png)
 
+## Pre-processing Stage :broom:
+Initially, several operations were conducted to prepare the dataset:
+
+- Uploading the data to a cloud storage service and importing it into the development environment.
+- Reading the training and test set text files.
+- Generating pairs of image paths for both same-class (identical) and different-class (non-identical) pairs.
+- Loading the images from their paths and constructing a DataFrame where each entry contains a pair of images and their corresponding label. The labels were assigned as 1 for images of the same class (identical) and 0 for images of different classes (non-identical).
+- Additionally, image normalization was performed by dividing each pixel value by 255.
+
+The provided training and test datasets are organized as follows:
+
+**Training set:** Consists of 2,200 samples, each comprising a grayscale image measuring 250x250 pixels. The initial 1,100 samples in the training set depict images of the same individual, while the subsequent 1,100 samples consist of pairs of images depicting two different individuals.
+
+**Validation set:** To evaluate the model's performance during training and optimize hyperparameters, a subset of 440 samples was reserved from the original training set to create a validation set.
+
+**Test set:** Comprises 1,000 samples, each representing a grayscale image with dimensions of 250x250 pixels. The first 500 samples in the test set portray images of the same individual, while the remaining 500 samples consist of pairs of images depicting two different individuals.
+
+**Data Augmentation:** Given the limited size of the dataset available for training, it is essential to enhance the dataset to facilitate effective neural network training. To address this, data augmentation techniques were utilized. Transformations such as RandomHorizontalFlip(), RandomVerticalFlip(), and RandomRotation() were applied to each image in the training set. This process effectively augmented the training set, doubling its size, while maintaining the integrity and correctness of the images.
+
 ## Network Architecture :hammer_and_wrench:
-The network comprises 5 blocks of convolutional layers, each followed by a ReLU activation function and MaxPool of 2x2. Additionally, it includes 2 fully connected layers with sigmoid activation.
+The network comprises 5 blocks of convolutional layers, where each followed by BatchNorm, ReLU activation function and MaxPool of 2x2. Additionally, the network includes 2 fully connected layers with sigmoid activation.
 
 - Convolution layer with 64 filters of 10x10.
-- BatchNorm(64).
+- BatchNorm(64) + ReLU + MaxPool of 2x2.
 - Convolution layer with 128 filters of 7x7.
-- BatchNorm(128).
+- BatchNorm(128) + ReLU + MaxPool of 2x2.
 - Convolution layer with 128 filters of 4x4.
-- BatchNorm(128).
+- BatchNorm(128) + ReLU + MaxPool of 2x2.
 - Convolution layer with 256 filters of 4x4.
-- BatchNorm(256).
+- BatchNorm(256) + ReLU + MaxPool of 2x2.
 - Convolution layer with 256 filters of 7x7.
-- BatchNorm(256).
-- Fully connected layer of 2,304 in-features and 4,096 out-features.
-- Fully connected layer of 4,096 in-features and 1 out-feature.
+- BatchNorm(256) + ReLU + MaxPool of 2x2.
+- Fully connected layer of 2,304 in-features and 4,096 out-features + Sigmoid.
+- Fully connected layer of 4,096 in-features and 1 out-feature + Sigmoid.
 
 ## Experimental Configuration :gear:
+-	The network consists of 5 convolutional layers followed by 2 fully connected layers.
+- Batch size options: [16, 32].
+- Loss function: BCELoss. Chosen for its suitability in binary classification tasks.
+- Initial momentum: 0.5. Increases linearly in each epoch according to the paper.
+- Learning rate options: [0.001, 0.0001].
+- Weight decay options: [0.01, 0.1].
+- Optimizer: AdamW.
+- Maximum epochs: 100.
+- Stopping criterion: 10 epochs without improvement in the validation set.
 
 ## Experimental Results :chart_with_upwards_trend:
-Outlined below are the results of eight experiments conducted with different combinations of batch size (16/32), learning rate (0.001/0.0001) and weight decay (0.1/0.01).
+Outlined below are the results of eight experiments conducted with different combinations of batch size [16, 32], learning rate [0.001, 0.0001] and weight decay [0.01, 0.1].
 
 | Exp. # | Batch Size | Learning Rate | Weight Decay | # of Epoches | Train Accuracy | Val Accuracy | Test Accuracy | Avg. Train Cost | Avg. Val Cost | Time (min) |
 |---|---|---|---|---|---|---|---|---|---|---|
