@@ -16,6 +16,9 @@ This project applies the principles outlined in the paper ["Siamese Neural Netwo
 ![](docs/Siamese_neural_network_architecture.png)
 
 ## Introduction :bookmark_tabs:
+This project endeavors to leverage Convolutional Neural Networks (CNNs) for Face Recognition via One-shot Classification and Siamese Networks.
+
+Siamese Neural Networks are a specialized class of neural networks designed for learning similarity between pairs of input samples. By encoding each input into a high-dimensional feature space and comparing their representations, Siamese networks can effectively measure the similarity or dissimilarity between the inputs. This makes them particularly useful in tasks such as Face Recognition and one-shot learning, where the model needs to generalize from a small number of examples.
 
 ## Goals :dart:
 The primary objective is to successfully execute a one-shot learning task for previously unseen objects. By providing two facial images of unfamiliar individuals, the architecture should reliably distinguish whether the images depict the same person.
