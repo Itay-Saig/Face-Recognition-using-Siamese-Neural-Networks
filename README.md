@@ -3,32 +3,32 @@ Utilizing Convolutional Neural Networks (CNNs) for Face Recognition via One-shot
 
 This project applies the principles outlined in the paper ["Siamese Neural Networks for One-shot Image Recognition"](https://www.cs.cmu.edu/~rsalakhu/papers/oneshot1.pdf), authored by Gregory Koch, Richard Zemel, and Ruslan Salakhutdinov.
 
-## Table of Contents :clipboard:
-  * [Introduction](#Introduction-bookmark_tabs)
-  * [Goals](#goals-dart)
-  * [Data Description](#data-description-bar_chart)
-  * [Pre-processing Stage](#pre-processing-stage-broom)
-  * [Network Architecture](#network-architecture-hammer_and_wrench)
-  * [Experimental Configuration](#experimental-configuration-gear)
-  * [Experimental Results](#experimental-results-chart_with_upwards_trend)
-  * [Experimental Visualizations](#experimental-visualizations-art)
+## :clipboard: Table of Contents
+  * [Introduction](#bookmark_tabs-introduction)
+  * [Goals](#dart-goals)
+  * [Data Description](#bar_chart-data-description)
+  * [Pre-processing Stage](#broom-pre-processing-stage)
+  * [Network Architecture](#hammer_and_wrench-network-architecture)
+  * [Experimental Configuration](#gear-experimental-configuration)
+  * [Experimental Results](#chart_with_upwards_trend-experimental-results)
+  * [Experimental Visualizations](#art-experimental-visualizations)
 
 ![](docs/Siamese_neural_network_architecture.png)
 
-## Introduction :bookmark_tabs:
+## :bookmark_tabs: Introduction
 This project endeavors to leverage Convolutional Neural Networks (CNNs) for Face Recognition via One-shot Classification and Siamese Networks.
 
 Siamese Neural Networks are a specialized class of neural networks designed for learning similarity between pairs of input samples. By encoding each input into a high-dimensional feature space and comparing their representations, Siamese networks can effectively measure the similarity or dissimilarity between the inputs. This makes them particularly useful in tasks such as Face Recognition and one-shot learning, where the model needs to generalize from a small number of examples.
 
-## Goals :dart:
+## :dart: Goals
 The primary objective is to successfully execute a one-shot learning task for previously unseen objects. By providing two facial images of unfamiliar individuals, the architecture should reliably distinguish whether the images depict the same person.
 
-## Data Description :bar_chart:
+## :bar_chart: Data Description
 Network performance and evaluation were done on the ['Labeled Faces in the Wild-a (LFW-a)'](https://talhassner.github.io/home/projects/lfwa/index.html) dataset, which is a collection of 250x250 pixel grayscale images of labeled face images intended for studying face recognition. The dataset contains 2,200 training images and 1,000 test images.
 
 ![](docs/LFW-a_example.png)
 
-## Pre-processing Stage :broom:
+## :broom: Pre-processing Stage
 Initially, several operations were conducted to prepare the dataset:
 
 - Uploading the data to a cloud storage service and importing it into the development environment.
@@ -47,7 +47,7 @@ The provided training and test datasets are organized as follows:
 
 **Data Augmentation:** Given the limited size of the dataset available for training, it is essential to enhance the dataset to facilitate effective neural network training. To address this, data augmentation techniques were utilized. Transformations such as RandomHorizontalFlip(), RandomVerticalFlip(), and RandomRotation() were applied to each image in the training set. This process effectively augmented the training set, doubling its size, while maintaining the integrity and correctness of the images.
 
-## Network Architecture :hammer_and_wrench:
+## :hammer_and_wrench: Network Architecture
 The network comprises 5 blocks of convolutional layers, where each followed by BatchNorm, ReLU activation function and MaxPool of 2x2. Additionally, the network includes 2 fully connected layers with sigmoid activation.
 
 - Convolution layer with 64 filters of 10x10.
@@ -63,7 +63,7 @@ The network comprises 5 blocks of convolutional layers, where each followed by B
 - Fully connected layer of 2,304 in-features and 4,096 out-features + Sigmoid.
 - Fully connected layer of 4,096 in-features and 1 out-feature + Sigmoid.
 
-## Experimental Configuration :gear:
+## :gear: Experimental Configuration
 -	The network consists of 5 convolutional layers followed by 2 fully connected layers.
 - Batch size options: [16, 32].
 - Loss function: BCELoss. Chosen for its suitability in binary classification tasks.
@@ -74,7 +74,7 @@ The network comprises 5 blocks of convolutional layers, where each followed by B
 - Maximum epochs: 100.
 - Stopping criterion: 10 epochs without improvement in the validation set.
 
-## Experimental Results :chart_with_upwards_trend:
+## :chart_with_upwards_trend: Experimental Results
 Outlined below are the results of eight experiments conducted with different combinations of batch size [16, 32], learning rate [0.001, 0.0001] and weight decay [0.01, 0.1].
 
 | Exp. # | Batch Size | Learning Rate | Weight Decay | # of Epoches | Train Accuracy | Val Accuracy | Test Accuracy | Avg. Train Cost | Avg. Val Cost | Time (min) |
@@ -88,4 +88,21 @@ Outlined below are the results of eight experiments conducted with different com
 | 7 | 32 | 0.0001 | 0.01 | 44 | 0.982 | 0.882 | 0.747 | 0.038 | 0.329 | 42:12 |
 | 8 | 32 | 0.0001 | 0.1 | 40 | 0.981 | 0.870 | 0.755 | 0.045 | 0.346 | 37:44 |
 
-## Experimental Visualizations :art:
+**Note:** The highest accuracy achieved on the test set is 0.765, which is influenced by the nature of the problem at hand. Some tasks lend themselves to achieving high accuracies exceeding 0.9, while others pose greater challenges. The relatively limited dataset size also contributes to this variability, and data augmentation has shown improvement in performance, albeit with the dataset still being relatively small.
+
+## :art: Experimental Visualizations
+The visualizations being showcased correspond to the model that achieved the highest accuracy on the test set.
+
+Below, a graph illustrates the cost progression across epochs for both the training and validation sets.<br/><br/>
+
+![](docs/Cost_across_epochs_visualization.png)
+
+**Fig. 1** | The evolution of cost across epochs for the optimal model.
+
+---
+
+Additionally, a confusion matrix is provided, offering insights into the model's predictions compared to the ground truth labels. It delineates True Positives (TP), True Negatives (TN), False Positives (FP), and False Negatives (FN).<br/><br/>
+
+![](docs/Confusion_matrix.png)
+
+**Fig. 2** | The confusion matrix of the optimal model: TP = 395, TN = 359, FP = 141, FN = 105.
